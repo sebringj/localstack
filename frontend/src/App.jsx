@@ -368,6 +368,10 @@ function TodoItem({ todo, editingId, editTitle, setEditTitle, toggleTodo, startE
             className="input input-bordered input-sm flex-1"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') saveEdit(todo)
+              if (e.key === 'Escape') setEditingId(null)
+            }}
             autoFocus
           />
           <div className="flex gap-1">
