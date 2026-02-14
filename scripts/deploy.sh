@@ -8,7 +8,12 @@ set -e
 # Ensure homebrew binaries are in PATH (for VS Code tasks)
 export PATH="/opt/homebrew/bin:$PATH"
 
+# Disable AWS CLI pager to prevent blocking
+export AWS_PAGER=""
+
 LOCALSTACK_ENDPOINT="http://localhost:4566"
+# Lambda functions run inside Docker and need to use host.docker.internal
+LAMBDA_LOCALSTACK_ENDPOINT="http://host.docker.internal:4566"
 REGION="us-east-1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -89,7 +94,7 @@ aws --endpoint-url=$LOCALSTACK_ENDPOINT --region=$REGION lambda create-function 
     --handler handler.handler \
     --zip-file fileb://auth.zip \
     --role arn:aws:iam::000000000000:role/lambda-role \
-    --environment "Variables={LOCALSTACK_ENDPOINT=$LOCALSTACK_ENDPOINT}" \
+    --environment "Variables={LOCALSTACK_ENDPOINT=$LAMBDA_LOCALSTACK_ENDPOINT}" \
     2>/dev/null || aws --endpoint-url=$LOCALSTACK_ENDPOINT --region=$REGION lambda update-function-code \
         --function-name auth-handler \
         --zip-file fileb://auth.zip
@@ -101,7 +106,7 @@ aws --endpoint-url=$LOCALSTACK_ENDPOINT --region=$REGION lambda create-function 
     --handler handler.handler \
     --zip-file fileb://todos.zip \
     --role arn:aws:iam::000000000000:role/lambda-role \
-    --environment "Variables={LOCALSTACK_ENDPOINT=$LOCALSTACK_ENDPOINT}" \
+    --environment "Variables={LOCALSTACK_ENDPOINT=$LAMBDA_LOCALSTACK_ENDPOINT}" \
     2>/dev/null || aws --endpoint-url=$LOCALSTACK_ENDPOINT --region=$REGION lambda update-function-code \
         --function-name todos-handler \
         --zip-file fileb://todos.zip
