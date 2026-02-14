@@ -31,10 +31,21 @@ This project includes [Autonomo](https://github.com/sebringj/autonomo) integrati
 - Verify state changes after actions
 - Run full validation scenarios
 
-**Setup:**
+### Getting Started with Autonomo
+
+To add Autonomo to your own project, see the [Autonomo Getting Started Guide](https://github.com/sebringj/autonomo#getting-started).
+
+**Quick overview:**
+1. Install: `npm install @autonomo/react` (or `@autonomo/angular`, `@autonomo/vue`)
+2. Add the hook to your app root (see [React example](https://github.com/sebringj/autonomo/tree/main/packages/%40autonomo/react#usage))
+3. Configure MCP in VS Code (`.vscode/mcp.json`)
+4. Set `VITE_AUTONOMO_PORT` env var for your port
+
+### This Project's Setup
+
 1. MCP config is in `.vscode/mcp.json`
 2. Frontend uses `useAutonomo` hook from `@autonomo/react`
-3. Set `VITE_AUTONOMO_PORT=9876` in `frontend/.env`
+3. Port configured via `VITE_AUTONOMO_PORT=9876` in `frontend/.env`
 
 **Example AI prompt:**
 > "Login with testuser/testpass, add a todo called 'Test item', mark it complete, then delete it"
