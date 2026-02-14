@@ -1,6 +1,19 @@
 # Todo App with LocalStack
 
-A full-stack todo application running entirely on LocalStack with:
+A full-stack todo application running entirely on [LocalStack](https://localstack.cloud/) - a cloud service emulator that runs AWS services locally on your machine.
+
+## Why LocalStack?
+
+**Develop against AWS without AWS costs or latency.** LocalStack emulates core AWS services (Lambda, DynamoDB, API Gateway, S3, SQS, etc.) on your local machine. You can:
+
+- 🚀 **Develop offline** - No internet required, no AWS account needed to get started
+- 💰 **Zero cloud costs** - Test and iterate without spending money
+- ⚡ **Instant deploys** - No waiting for CloudFormation, deploys happen in seconds
+- 🔄 **Reset anytime** - Wipe and redeploy your entire stack instantly
+- 🧪 **Safe experimentation** - Break things without affecting production
+
+## Tech Stack
+
 - **Frontend**: React 19 + Vite
 - **Backend**: Python AWS Lambda
 - **Database**: DynamoDB
