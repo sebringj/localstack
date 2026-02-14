@@ -1,10 +1,32 @@
 # Todo App with LocalStack
 
 A full-stack todo application running entirely on LocalStack with:
-- **Frontend**: React + Vite
+- **Frontend**: React 19 + Vite
 - **Backend**: Python AWS Lambda
 - **Database**: DynamoDB
 - **API**: API Gateway
+- **AI Testing**: [Autonomo MCP](https://github.com/sebringj/autonomo) for AI-driven UX validation
+
+## Autonomo Integration
+
+This project includes [Autonomo](https://github.com/sebringj/autonomo) integration, allowing AI assistants (GitHub Copilot, Claude, Cursor, etc.) to interact with and validate the running app in real-time.
+
+**What the AI can do:**
+- See current screen and all interactive elements
+- Fill in forms (login, add todos)
+- Press buttons (submit, toggle, delete)
+- Verify state changes after actions
+- Run full validation scenarios
+
+**Setup:**
+1. MCP config is in `.vscode/mcp.json`
+2. Frontend uses `useAutonomo` hook from `@autonomo/react`
+3. Set `VITE_AUTONOMO_PORT=9876` in `frontend/.env`
+
+**Example AI prompt:**
+> "Login with testuser/testpass, add a todo called 'Test item', mark it complete, then delete it"
+
+The AI will execute each step and verify the results automatically.
 
 ## Prerequisites
 
@@ -70,8 +92,9 @@ cd frontend && npm install && npm run dev
 
 ```
 localstack/
-├── .env                    # Environment variables (AWS creds, LocalStack token)
+├── .nvmrc                  # Node.js version (22)
 ├── .vscode/
+│   ├── mcp.json            # Autonomo MCP server config
 │   └── tasks.json          # VS Code tasks for development
 ├── backend/
 │   ├── auth/
@@ -80,8 +103,9 @@ localstack/
 │   │   └── handler.py      # Todo CRUD Lambda
 │   └── requirements.txt
 ├── frontend/
+│   ├── .env                # Autonomo port config (VITE_AUTONOMO_PORT)
 │   ├── src/
-│   │   ├── App.jsx         # Main React app
+│   │   ├── App.jsx         # Main React app with useAutonomo hook
 │   │   ├── main.jsx
 │   │   └── index.css
 │   ├── index.html
