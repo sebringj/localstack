@@ -1,12 +1,24 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, FormEvent, ChangeEvent, KeyboardEvent } from 'react'
 import { useAutonomo, useTapHandler, useFillHandler, useToggleHandler, useScreen, state } from '@sebringj/autonomo-react'
 
 // API base URL - uses proxy in dev, direct in production
 const API_BASE = '/api'
 
+interface Todo {
+  todo_id: string
+  title: string
+  completed: boolean
+  user_id: string
+  created_at: string
+}
+
+interface User {
+  username: string
+}
+
 function App() {
-  const [user, setUser] = useState(null)
-  const [token, setToken] = useState(localStorage.getItem('token'))
+  const [user, setUser] = useState<User | null>(null)
+  const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
   
   // Initialize Autonomo connection
   useAutonomo({
@@ -21,7 +33,7 @@ function App() {
     }
   }, [token])
 
-  const handleLogin = (newToken, username) => {
+  const handleLogin = (newToken: string, username: string) => {
     localStorage.setItem('token', newToken)
     setToken(newToken)
     setUser({ username })
@@ -38,7 +50,7 @@ function App() {
       <div className="card w-full max-w-lg bg-base-100 shadow-2xl">
         <div className="card-body">
           {user ? (
-            <TodoList user={user} token={token} onLogout={handleLogout} />
+            <TodoList token={token!} onLogout={handleLogout} />
           ) : (
             <Login onLogin={handleLogin} />
           )}
@@ -48,26 +60,30 @@ function App() {
   )
 }
 
-function Login({ onLogin }) {
+interface LoginProps {
+  onLogin: (token: string, username: string) => void
+}
+
+function Login({ onLogin }: LoginProps) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const formRef = { submit: null }
+  const formRef: { submit: (() => Promise<void>) | null } = { submit: null }
 
   // Set screen for Autonomo
   useScreen('Login')
 
   // Register fill handlers for inputs
-  useFillHandler('Login.Username', (value) => setUsername(value), { hint: 'Username input field' })
-  useFillHandler('Login.Password', (value) => setPassword(value), { hint: 'Password input field' })
+  useFillHandler('Login.Username', (value: string) => setUsername(value), { hint: 'Username input field' })
+  useFillHandler('Login.Password', (value: string) => setPassword(value), { hint: 'Password input field' })
   
   // Register tap handler for submit button
   useTapHandler('Login.Submit', () => {
     if (formRef.submit) formRef.submit()
   }, { hint: 'Login button' })
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e?: FormEvent) => {
     if (e) e.preventDefault()
     setError('')
     setLoading(true)
@@ -87,8 +103,9 @@ function Login({ onLogin }) {
       
       onLogin(data.token, data.username)
     } catch (err) {
-      setError(err.message)
-      state.addError(err.message)
+      const message = err instanceof Error ? err.message : 'Login failed'
+      setError(message)
+      state.addError(message)
     } finally {
       setLoading(false)
     }
@@ -111,7 +128,7 @@ function Login({ onLogin }) {
             placeholder="Username"
             className="grow"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
             required
           />
         </label>
@@ -125,7 +142,7 @@ function Login({ onLogin }) {
             placeholder="Password"
             className="grow"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             required
           />
         </label>
@@ -150,20 +167,25 @@ function Login({ onLogin }) {
   )
 }
 
-function TodoList({ user, token, onLogout }) {
-  const [todos, setTodos] = useState([])
+interface TodoListProps {
+  token: string
+  onLogout: () => void
+}
+
+function TodoList({ token, onLogout }: TodoListProps) {
+  const [todos, setTodos] = useState<Todo[]>([])
   const [newTodo, setNewTodo] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [editingId, setEditingId] = useState(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [editTitle, setEditTitle] = useState('')
-  const actionsRef = { addTodo: null, logout: null }
+  const actionsRef: { addTodo: (() => Promise<void>) | null; logout: (() => void) | null } = { addTodo: null, logout: null }
 
   // Set screen for Autonomo
   useScreen('Todos')
 
   // Register handlers for Autonomo
-  useFillHandler('Todos.NewTodoInput', (value) => setNewTodo(value), { hint: 'New todo input field' })
+  useFillHandler('Todos.NewTodoInput', (value: string) => setNewTodo(value), { hint: 'New todo input field' })
   useTapHandler('Todos.AddButton', () => { if (actionsRef.addTodo) actionsRef.addTodo() }, { hint: 'Add todo button' })
   useTapHandler('Todos.Logout', () => { if (actionsRef.logout) actionsRef.logout() }, { hint: 'Logout button' })
 
@@ -176,7 +198,8 @@ function TodoList({ user, token, onLogout }) {
       if (!res.ok) throw new Error(data.error)
       setTodos(data.todos || [])
     } catch (err) {
-      setError(err.message)
+      const message = err instanceof Error ? err.message : 'Failed to fetch todos'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -186,7 +209,7 @@ function TodoList({ user, token, onLogout }) {
     fetchTodos()
   }, [token])
 
-  const addTodo = async (e) => {
+  const addTodo = async (e?: FormEvent) => {
     if (e) e.preventDefault()
     if (!newTodo.trim()) return
 
@@ -204,8 +227,9 @@ function TodoList({ user, token, onLogout }) {
       setTodos([...todos, data.todo])
       setNewTodo('')
     } catch (err) {
-      setError(err.message)
-      state.addError(err.message)
+      const message = err instanceof Error ? err.message : 'Failed to add todo'
+      setError(message)
+      state.addError(message)
     }
   }
 
@@ -213,7 +237,7 @@ function TodoList({ user, token, onLogout }) {
   actionsRef.addTodo = addTodo
   actionsRef.logout = onLogout
 
-  const toggleTodo = async (todo) => {
+  const toggleTodo = async (todo: Todo) => {
     try {
       const res = await fetch(`${API_BASE}/todos/${todo.todo_id}`, {
         method: 'PUT',
@@ -227,16 +251,17 @@ function TodoList({ user, token, onLogout }) {
       if (!res.ok) throw new Error(data.error)
       setTodos(todos.map(t => t.todo_id === todo.todo_id ? data.todo : t))
     } catch (err) {
-      setError(err.message)
+      const message = err instanceof Error ? err.message : 'Failed to toggle todo'
+      setError(message)
     }
   }
 
-  const startEdit = (todo) => {
+  const startEdit = (todo: Todo) => {
     setEditingId(todo.todo_id)
     setEditTitle(todo.title)
   }
 
-  const saveEdit = async (todo) => {
+  const saveEdit = async (todo: Todo) => {
     try {
       const res = await fetch(`${API_BASE}/todos/${todo.todo_id}`, {
         method: 'PUT',
@@ -251,11 +276,12 @@ function TodoList({ user, token, onLogout }) {
       setTodos(todos.map(t => t.todo_id === todo.todo_id ? data.todo : t))
       setEditingId(null)
     } catch (err) {
-      setError(err.message)
+      const message = err instanceof Error ? err.message : 'Failed to save todo'
+      setError(message)
     }
   }
 
-  const deleteTodo = async (todoId) => {
+  const deleteTodo = async (todoId: string) => {
     try {
       const res = await fetch(`${API_BASE}/todos/${todoId}`, {
         method: 'DELETE',
@@ -267,7 +293,8 @@ function TodoList({ user, token, onLogout }) {
       }
       setTodos(todos.filter(t => t.todo_id !== todoId))
     } catch (err) {
-      setError(err.message)
+      const message = err instanceof Error ? err.message : 'Failed to delete todo'
+      setError(message)
     }
   }
 
@@ -302,7 +329,7 @@ function TodoList({ user, token, onLogout }) {
           placeholder="Add a new todo..."
           className="input input-bordered join-item flex-1"
           value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setNewTodo(e.target.value)}
         />
         <button data-testid="Todos.AddButton" type="submit" className="btn btn-primary join-item">Add</button>
       </form>
@@ -336,15 +363,28 @@ function TodoList({ user, token, onLogout }) {
   )
 }
 
-function TodoItem({ todo, editingId, editTitle, setEditTitle, toggleTodo, startEdit, saveEdit, setEditingId, deleteTodo }) {
+interface TodoItemProps {
+  todo: Todo
+  editingId: string | null
+  editTitle: string
+  setEditTitle: (title: string) => void
+  toggleTodo: (todo: Todo) => Promise<void>
+  startEdit: (todo: Todo) => void
+  saveEdit: (todo: Todo) => Promise<void>
+  setEditingId: (id: string | null) => void
+  deleteTodo: (todoId: string) => Promise<void>
+}
+
+function TodoItem({ todo, editingId, editTitle, setEditTitle, toggleTodo, startEdit, saveEdit, setEditingId, deleteTodo }: TodoItemProps) {
   const todoId = todo.todo_id
 
   // Register Autonomo handlers for this todo item
-  useToggleHandler(`Todo.${todoId}.Checkbox`, (value) => {
-    if (value !== todo.completed) toggleTodo(todo)
+  useToggleHandler(`Todo.${todoId}.Checkbox`, (value?: string) => {
+    const checked = value === 'true'
+    if (checked !== todo.completed) toggleTodo(todo)
   }, { hint: `Toggle todo: ${todo.title}` })
   
-  useFillHandler(`Todo.${todoId}.EditInput`, (value) => setEditTitle(value), { hint: 'Edit todo title' })
+  useFillHandler(`Todo.${todoId}.EditInput`, (value: string) => setEditTitle(value), { hint: 'Edit todo title' })
   useTapHandler(`Todo.${todoId}.Edit`, () => startEdit(todo), { hint: 'Edit this todo' })
   useTapHandler(`Todo.${todoId}.Save`, () => saveEdit(todo), { hint: 'Save edited todo' })
   useTapHandler(`Todo.${todoId}.Cancel`, () => setEditingId(null), { hint: 'Cancel editing' })
@@ -367,8 +407,8 @@ function TodoItem({ todo, editingId, editTitle, setEditTitle, toggleTodo, startE
             type="text"
             className="input input-bordered input-sm flex-1"
             value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEditTitle(e.target.value)}
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
               if (e.key === 'Enter') saveEdit(todo)
               if (e.key === 'Escape') setEditingId(null)
             }}
