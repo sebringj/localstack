@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useAutonomo, useTapHandler, useFillHandler, useToggleHandler, useScreen, state } from '@autonomo/react'
+import { useAutonomo, useTapHandler, useFillHandler, useToggleHandler, useScreen, state } from '@sebringj/autonomo-react'
 
 // API base URL - uses proxy in dev, direct in production
 const API_BASE = '/api'

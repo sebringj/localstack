@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@autonomo/react": "file:../../autonomo/packages/@autonomo/react",
+    "@sebringj/autonomo-react": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
