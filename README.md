@@ -11,7 +11,34 @@ A full-stack todo application running entirely on LocalStack with:
 - [LocalStack](https://localstack.cloud/) installed (`pip install localstack`)
 - [AWS CLI](https://aws.amazon.com/cli/) installed
 - Node.js 18+
-- Your LocalStack auth token (already configured in `.env`)
+- LocalStack Pro/Team auth token (for Pro features)
+
+## Setup
+
+### 1. Configure LocalStack Auth Token
+
+Get your auth token from [LocalStack Dashboard](https://app.localstack.cloud/account/apikeys).
+
+**Option A: Shell profile (recommended)**
+```bash
+# Add to ~/.zshrc or ~/.bashrc
+export LOCALSTACK_AUTH_TOKEN="your-token-here"
+```
+
+**Option B: Create local env file**
+```bash
+# Create .localstack.env (gitignored)
+echo 'LOCALSTACK_AUTH_TOKEN=your-token-here' > .localstack.env
+
+# Source before running tasks
+source .localstack.env
+```
+
+### 2. Install Dependencies
+
+```bash
+cd frontend && npm install
+```
 
 ## Quick Start
 
@@ -92,9 +119,10 @@ All endpoints are proxied through Vite during development:
 ## Troubleshooting
 
 ### LocalStack not starting
-Make sure your auth token is valid in `.env`:
+Make sure your auth token is set:
 ```bash
-localstack auth set-token YOUR_TOKEN
+echo $LOCALSTACK_AUTH_TOKEN  # Should print your token
+# If empty, export it or source your .localstack.env file
 ```
 
 ### API calls failing
