@@ -101,29 +101,42 @@ function Login({ onLogin }) {
     <>
       <h2 className="card-title text-2xl font-bold justify-center mb-4">Todo App Login</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="form-control">
+        <label className="input input-bordered flex items-center gap-2 w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
+            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+          </svg>
           <input
             data-testid="Login.Username"
             type="text"
             placeholder="Username"
-            className="input input-bordered w-full"
+            className="grow"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
-        <div className="form-control">
+        </label>
+        <label className="input input-bordered flex items-center gap-2 w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
+            <path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" />
+          </svg>
           <input
             data-testid="Login.Password"
             type="password"
             placeholder="Password"
-            className="input input-bordered w-full"
+            className="grow"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        {error && <div className="alert alert-error text-sm">{error}</div>}
+        </label>
+        {error && (
+          <div role="alert" className="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-sm">{error}</span>
+          </div>
+        )}
         <button data-testid="Login.Submit" type="submit" className="btn btn-primary w-full" disabled={loading}>
           {loading && <span className="loading loading-spinner loading-sm"></span>}
           {loading ? 'Logging in...' : 'Login'}
@@ -273,7 +286,14 @@ function TodoList({ user, token, onLogout }) {
         <button data-testid="Todos.Logout" className="btn btn-error btn-sm" onClick={onLogout}>Logout</button>
       </div>
       
-      {error && <div className="alert alert-error text-sm mb-4">{error}</div>}
+      {error && (
+        <div role="alert" className="alert alert-error mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span className="text-sm">{error}</span>
+        </div>
+      )}
       
       <form className="join w-full mb-6" onSubmit={addTodo}>
         <input
@@ -361,8 +381,8 @@ function TodoItem({ todo, editingId, editTitle, setEditTitle, toggleTodo, startE
             {todo.title}
           </span>
           <div className="flex gap-1">
-            <button data-testid={`Todo.${todoId}.Edit`} className="btn btn-info btn-sm btn-outline" onClick={() => startEdit(todo)}>Edit</button>
-            <button data-testid={`Todo.${todoId}.Delete`} className="btn btn-error btn-sm btn-outline" onClick={() => deleteTodo(todo.todo_id)}>Delete</button>
+            <button data-testid={`Todo.${todoId}.Edit`} className="btn btn-outline btn-info btn-sm" onClick={() => startEdit(todo)}>Edit</button>
+            <button data-testid={`Todo.${todoId}.Delete`} className="btn btn-outline btn-error btn-sm" onClick={() => deleteTodo(todo.todo_id)}>Delete</button>
           </div>
         </>
       )}
