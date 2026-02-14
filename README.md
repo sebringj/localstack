@@ -36,7 +36,7 @@ This project includes [Autonomo](https://github.com/sebringj/autonomo) integrati
 To add Autonomo to your own project, see the [Autonomo Getting Started Guide](https://github.com/sebringj/autonomo#getting-started).
 
 **Quick overview:**
-1. Install: `npm install @autonomo/react` (or `@autonomo/angular`, `@autonomo/vue`)
+1. Install: `npm install @sebringj/autonomo-react` (or `@autonomo/angular`, `@autonomo/vue`)
 2. Add the hook to your app root (see [React example](https://github.com/sebringj/autonomo/tree/main/packages/%40autonomo/react#usage))
 3. Configure MCP in VS Code (`.vscode/mcp.json`)
 4. Set `VITE_AUTONOMO_PORT` env var for your port
@@ -44,7 +44,7 @@ To add Autonomo to your own project, see the [Autonomo Getting Started Guide](ht
 ### This Project's Setup
 
 1. MCP config is in `.vscode/mcp.json`
-2. Frontend uses `useAutonomo` hook from `@autonomo/react`
+2. Frontend uses `useAutonomo` hook from `@sebringj/autonomo-react`
 3. Port configured via `VITE_AUTONOMO_PORT=9876` in `frontend/.env`
 
 **Example AI prompt:**
