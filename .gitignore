@@ -13,6 +13,8 @@ volume/
 
 # Environment
 .env
+.env.*
+.localstack.env
 
 # Generated files
 frontend/.api-id
