@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "autonomo": {
+      "command": "autonomo-mcp",
+      "args": ["--multi"]
+    }
+  }
+}

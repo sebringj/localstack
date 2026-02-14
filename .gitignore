@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+
+# Build outputs
+dist/
+*.zip
+
+# LocalStack
+.localstack/
+volume/
+
+# Environment
+.env
+
+# Generated files
+frontend/.api-id
+
+# IDE
+.idea/
+
+# OS
+.DS_Store

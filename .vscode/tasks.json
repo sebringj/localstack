@@ -1,0 +1,127 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // =========================================================================
+    // COMPOUND TASK - Run this one to start everything (Ctrl+Cmd+B / Shift+Cmd+B)
+    // =========================================================================
+    {
+      "label": "🚀 Start All Local Services",
+      "dependsOn": [
+        "1️⃣ LocalStack",
+        "⚡ Start Background Services"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "⚡ Start Background Services",
+      "dependsOn": [
+        "2️⃣ Deploy Backend",
+        "3️⃣ Frontend (Vite)"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+
+    // =========================================================================
+    // Individual services - each runs in its own terminal panel
+    // =========================================================================
+    {
+      "label": "1️⃣ LocalStack",
+      "type": "shell",
+      "command": "echo '════════════════════════════════════════' && echo '🚀 Starting LocalStack (daemon mode)...' && echo '════════════════════════════════════════' && /opt/homebrew/bin/localstack start -d && echo '⏳ Waiting for LocalStack to be ready...' && /opt/homebrew/bin/localstack wait -t 60 && echo '✅ LocalStack is ready!'",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "LOCALSTACK_AUTH_TOKEN": "YOUR_LOCALSTACK_AUTH_TOKEN"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "isBackground": false
+    },
+    {
+      "label": "2️⃣ Deploy Backend",
+      "type": "shell",
+      "command": "chmod +x scripts/deploy.sh && ./scripts/deploy.sh",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/opt/homebrew/bin:${env:PATH}",
+          "AWS_ACCESS_KEY_ID": "test",
+          "AWS_SECRET_ACCESS_KEY": "test",
+          "AWS_DEFAULT_REGION": "us-east-1"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "3️⃣ Frontend (Vite)",
+      "type": "shell",
+      "command": "echo '════════════════════════════════════════' && echo '🌐 Starting Frontend at http://localhost:3000' && echo '════════════════════════════════════════' && npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "isBackground": true,
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+
+    // =========================================================================
+    // Utility tasks
+    // =========================================================================
+    {
+      "label": "🛑 Stop LocalStack",
+      "type": "shell",
+      "command": "/opt/homebrew/bin/localstack stop",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔄 Redeploy Backend",
+      "type": "shell",
+      "command": "chmod +x scripts/deploy.sh && ./scripts/deploy.sh",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PATH": "/opt/homebrew/bin:${env:PATH}",
+          "AWS_ACCESS_KEY_ID": "test",
+          "AWS_SECRET_ACCESS_KEY": "test",
+          "AWS_DEFAULT_REGION": "us-east-1"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
