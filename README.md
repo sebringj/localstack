@@ -10,7 +10,7 @@ A full-stack todo application running entirely on LocalStack with:
 
 - [LocalStack](https://localstack.cloud/) installed (`pip install localstack`)
 - [AWS CLI](https://aws.amazon.com/cli/) installed
-- Node.js 18+
+- Node.js 22+ (use `nvm use` if you have nvm)
 - LocalStack Pro/Team auth token (for Pro features)
 
 ## Setup
