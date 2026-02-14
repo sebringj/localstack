@@ -124,7 +124,8 @@ function Login({ onLogin }) {
           />
         </div>
         {error && <div className="alert alert-error text-sm">{error}</div>}
-        <button data-testid="Login.Submit" type="submit" className={`btn btn-primary w-full ${loading ? 'loading' : ''}`} disabled={loading}>
+        <button data-testid="Login.Submit" type="submit" className="btn btn-primary w-full" disabled={loading}>
+          {loading && <span className="loading loading-spinner loading-sm"></span>}
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
