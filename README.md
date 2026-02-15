@@ -59,6 +59,10 @@ The AI will execute each step and verify the results automatically.
 - Node.js 22+ (use `nvm use` if you have nvm)
 - LocalStack Pro/Team auth token (for Pro features)
 
+**Windows notes:**
+- Use Windows PowerShell 5.1+ (or PowerShell 7+)
+- Ensure `localstack`, `aws`, and `npm` are available on your `PATH`
+
 ## Setup
 
 ### 1. Configure LocalStack Auth Token
