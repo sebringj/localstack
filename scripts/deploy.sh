@@ -5,9 +5,6 @@
 
 set -e
 
-# Ensure homebrew binaries are in PATH (for VS Code tasks)
-export PATH="/opt/homebrew/bin:$PATH"
-
 # Disable AWS CLI pager to prevent blocking
 export AWS_PAGER=""
 

@@ -16,16 +16,18 @@ fi
 
 echo "🚀 Starting LocalStack..."
 
+LOCALSTACK_CMD="$(command -v localstack 2>/dev/null || echo /opt/homebrew/bin/localstack)"
+
 # Set auth token if available
 if [ -n "$LOCALSTACK_AUTH_TOKEN" ]; then
-    localstack auth set-token "$LOCALSTACK_AUTH_TOKEN"
+    "$LOCALSTACK_CMD" auth set-token "$LOCALSTACK_AUTH_TOKEN"
 fi
 
 # Start LocalStack in background
-localstack start -d
+"$LOCALSTACK_CMD" start -d
 
 echo "⏳ Waiting for LocalStack to be ready..."
-localstack wait -t 60
+"$LOCALSTACK_CMD" wait -t 60
 
 echo "✅ LocalStack is running!"
 

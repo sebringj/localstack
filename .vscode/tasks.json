@@ -33,7 +33,10 @@
     {
       "label": "1️⃣ LocalStack",
       "type": "shell",
-      "command": "echo '════════════════════════════════════════' && echo '🚀 Starting LocalStack (daemon mode)...' && echo '════════════════════════════════════════' && /opt/homebrew/bin/localstack start -d && echo '⏳ Waiting for LocalStack to be ready...' && /opt/homebrew/bin/localstack wait -t 60 && echo '✅ LocalStack is ready!'",
+      "command": "LOCALSTACK_CMD=\"$(command -v localstack 2>/dev/null || echo /opt/homebrew/bin/localstack)\" && echo '════════════════════════════════════════' && echo '🚀 Starting LocalStack (daemon mode)...' && echo '════════════════════════════════════════' && \"$LOCALSTACK_CMD\" start -d && echo '⏳ Waiting for LocalStack to be ready...' && \"$LOCALSTACK_CMD\" wait -t 60 && echo '✅ LocalStack is ready!'",
+      "windows": {
+        "command": "Write-Host '════════════════════════════════════════'; Write-Host '🚀 Starting LocalStack (daemon mode)...'; Write-Host '════════════════════════════════════════'; localstack start -d; Write-Host '⏳ Waiting for LocalStack to be ready...'; localstack wait -t 60; Write-Host '✅ LocalStack is ready!'"
+      },
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
@@ -50,11 +53,13 @@
     {
       "label": "2️⃣ Deploy Backend",
       "type": "shell",
-      "command": "chmod +x scripts/deploy.sh && ./scripts/deploy.sh",
+      "command": "bash ./scripts/deploy.sh",
+      "windows": {
+        "command": "powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1"
+      },
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
-          "PATH": "/opt/homebrew/bin:${env:PATH}",
           "AWS_ACCESS_KEY_ID": "test",
           "AWS_SECRET_ACCESS_KEY": "test",
           "AWS_DEFAULT_REGION": "us-east-1"
@@ -94,7 +99,10 @@
     {
       "label": "🛑 Stop LocalStack",
       "type": "shell",
-      "command": "/opt/homebrew/bin/localstack stop",
+      "command": "LOCALSTACK_CMD=\"$(command -v localstack 2>/dev/null || echo /opt/homebrew/bin/localstack)\" && \"$LOCALSTACK_CMD\" stop",
+      "windows": {
+        "command": "localstack stop"
+      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -107,11 +115,13 @@
     {
       "label": "🔄 Redeploy Backend",
       "type": "shell",
-      "command": "chmod +x scripts/deploy.sh && ./scripts/deploy.sh",
+      "command": "bash ./scripts/deploy.sh",
+      "windows": {
+        "command": "powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1"
+      },
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
-          "PATH": "/opt/homebrew/bin:${env:PATH}",
           "AWS_ACCESS_KEY_ID": "test",
           "AWS_SECRET_ACCESS_KEY": "test",
           "AWS_DEFAULT_REGION": "us-east-1"

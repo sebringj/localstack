@@ -3,5 +3,6 @@
 # Stop all local development dependencies
 
 echo "🛑 Stopping LocalStack..."
-localstack stop 2>/dev/null || true
+LOCALSTACK_CMD="$(command -v localstack 2>/dev/null || echo /opt/homebrew/bin/localstack)"
+"$LOCALSTACK_CMD" stop 2>/dev/null || true
 echo "✅ LocalStack stopped!"

@@ -61,8 +61,6 @@ The AI will execute each step and verify the results automatically.
 
 ## Setup
 
-> Need Windows support? See [WINDOWS_SETUP_PROMPT.md](./WINDOWS_SETUP_PROMPT.md) and paste it into your AI assistant to generate a Windows-compatible setup plan and patch.
-
 ### 1. Configure LocalStack Auth Token
 
 Get your auth token from [LocalStack Dashboard](https://app.localstack.cloud/getting-started).
@@ -99,12 +97,24 @@ Or use the compound task "Start All (LocalStack + Frontend)" to run both sequent
 
 ### Option 2: Command Line
 
+macOS/Linux:
+
 ```bash
 # Start LocalStack and deploy
 ./scripts/start-all.sh
 
 # In another terminal, start the frontend
 cd frontend && npm install && npm run dev
+```
+
+Windows (PowerShell):
+
+```powershell
+# Start LocalStack and deploy
+./scripts/start-all.ps1
+
+# In another terminal, start the frontend
+cd frontend; npm install; npm run dev
 ```
 
 ## Access the App
@@ -177,11 +187,17 @@ echo $LOCALSTACK_AUTH_TOKEN  # Should print your token
 
 ### API calls failing
 1. Ensure LocalStack is running: `localstack status`
-2. Re-deploy: `./scripts/deploy.sh`
+2. Re-deploy: `./scripts/deploy.sh` (macOS/Linux) or `./scripts/deploy.ps1` (Windows PowerShell)
 
 ### Reset everything
 ```bash
 ./scripts/stop-all.sh
 localstack start
 ./scripts/deploy.sh
+```
+
+```powershell
+./scripts/stop-all.ps1
+localstack start
+./scripts/deploy.ps1
 ```
