@@ -63,7 +63,7 @@ The AI will execute each step and verify the results automatically.
 
 ### 1. Configure LocalStack Auth Token
 
-Get your auth token from [LocalStack Dashboard](https://app.localstack.cloud/account/apikeys).
+Get your auth token from [LocalStack Dashboard](https://app.localstack.cloud/getting-started).
 
 **Option A: Shell profile (recommended)**
 ```bash
