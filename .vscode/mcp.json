@@ -1,8 +1,8 @@
 {
   "servers": {
     "autonomo": {
-      "command": "/Users/jasonsebring/.nvm/versions/node/v22.1.0/bin/node",
-      "args": ["/Users/jasonsebring/.nvm/versions/node/v22.1.0/bin/autonomo-mcp"],
+      "command": "npx",
+      "args": ["-y", "autonomo-mcp"],
       "env": {
         "AUTONOMO_PORT": "9876"
       }
