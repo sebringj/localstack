@@ -1,8 +1,12 @@
 {
   "servers": {
     "autonomo": {
-      "command": "npx",
-      "args": ["-y", "github:sebringj/autonomo/packages/@autonomo/mcp-server"],
+      "command": "/usr/bin/env",
+      "args": [
+        "bash",
+        "-c",
+        "source \"$HOME/.nvm/nvm.sh\" >/dev/null 2>&1 || true; autonomo-mcp"
+      ],
       "env": {
         "AUTONOMO_PORT": "9876"
       }
