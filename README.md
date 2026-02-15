@@ -61,6 +61,8 @@ The AI will execute each step and verify the results automatically.
 
 ## Setup
 
+> Need Windows support? See [WINDOWS_SETUP_PROMPT.md](./WINDOWS_SETUP_PROMPT.md) and paste it into your AI assistant to generate a Windows-compatible setup plan and patch.
+
 ### 1. Configure LocalStack Auth Token
 
 Get your auth token from [LocalStack Dashboard](https://app.localstack.cloud/getting-started).
